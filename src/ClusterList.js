@@ -60,27 +60,52 @@ export const renderAdditionalInfoItems = itemProperties =>
 
 
 class ClusterList extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {clusters: mockListItems, i: 10}
+  }
+  createCluster() {
+    this.setState((prevState, props) => ({
+      clusters: [
+        ...prevState.clusters,
+        {
+          title: 'Item ' + prevState.i.toString(),
+          description: 'This is Item 51 description',
+          properties: { nodes: 0 },
+          expandedContentText:
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
+          compoundExpandText: {
+            nodes: "Text describing Item 0's nodes",
+          }
+        }
+      ],
+      i: prevState.i + 1,
+    }))
+  }
   render() {
     return (
-      <ListView>
-        {mockListItems.map(({ actions, properties, title, description, expandedContentText, hideCloseIcon }, index) => (
-          <ListView.Item
-            key={index}
-            actions={renderActions(actions)}
-            checkboxInput={<input type="checkbox" />}
-            leftContent={<ListView.Icon name="cluster" type="pf" />}
-            additionalInfo={renderAdditionalInfoItems(properties)}
-            heading={title}
-            description={description}
-            stacked={false}
-            hideCloseIcon={false}
-          >
-            <Row>
-              <Col sm={11}>{expandedContentText}</Col>
-            </Row>
-          </ListView.Item>
-        ))}
-      </ListView>
+      <div>
+        <Button onClick={() => {setTimeout(() => {this.createCluster(); this.createCluster();}, 1000)}}>Add cluster</Button>
+        <ListView>
+          {this.state.clusters.map(({ actions, properties, title, description, expandedContentText, hideCloseIcon }, index) => (
+            <ListView.Item
+              key={index}
+              actions={renderActions(actions)}
+              checkboxInput={<input type="checkbox" />}
+              leftContent={<ListView.Icon name="cluster" type="pf" />}
+              additionalInfo={renderAdditionalInfoItems(properties)}
+              heading={title}
+              description={description}
+              stacked={false}
+              hideCloseIcon={false}
+            >
+              <Row>
+                <Col sm={11}>{expandedContentText}</Col>
+              </Row>
+            </ListView.Item>
+          ))}
+        </ListView>
+      </div>
     );
   }
 }
