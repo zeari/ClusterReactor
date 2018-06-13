@@ -1,39 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { ListView, Icon, Button, Row, Col } from 'patternfly-react'
-
-export const mockListItems = [
-  {
-    title: 'Item 1',
-    description: 'This is Item 1 description',
-    properties: { nodes: 7 },
-    expandedContentText:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-    compoundExpandText: {
-      nodes: "Text describing Item 1's nodes",
-    }
-  },
-  {
-    title: 'Item 2',
-    description: 'This is Item 2 description',
-    properties: { nodes: 11 },
-    expandedContentText:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-    compoundExpandText: {
-      nodes: "Text describing Item 2's nodes",
-    }
-  },
-  {
-    title: 'Item 3',
-    description: 'This is Item 3 description',
-    properties: { nodes: 2 },
-    expandedContentText:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-    compoundExpandText: {
-      nodes: "Text describing Item 3's nodes",
-    }
-  },
-];
+import PropTypes from 'prop-types'
 
 export const renderActions = () => (
   <div>
@@ -60,10 +28,10 @@ export const renderAdditionalInfoItems = itemProperties =>
 
 
 class ClusterList extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {clusters: mockListItems, i: 10}
+  static propTypes = {
+    clusters: PropTypes.array.isRequired,
   }
+
   createCluster() {
     this.setState((prevState, props) => ({
       clusters: [
@@ -83,11 +51,12 @@ class ClusterList extends Component {
     }))
   }
   render() {
+    console.log('rerender list. props: ', this.props )
     return (
       <div>
         <Button onClick={() => {setTimeout(() => {this.createCluster(); this.createCluster();}, 1000)}}>Add cluster</Button>
         <ListView>
-          {this.state.clusters.map(({ actions, properties, title, description, expandedContentText, hideCloseIcon }, index) => (
+          {this.props.clusters.map(({ actions, properties, title, description, expandedContentText, hideCloseIcon }, index) => (
             <ListView.Item
               key={index}
               actions={renderActions(actions)}
